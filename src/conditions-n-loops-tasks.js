@@ -388,7 +388,35 @@ function rotateMatrix(/* matrix */) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  return arr.sort((a, b) => a - b);
+  const array = arr;
+
+  function getDivider(sortArr, min, max) {
+    const sortingArr = sortArr;
+    let i = min - 1;
+    for (let j = min; j < max; j += 1) {
+      if (array[j] <= sortingArr[max]) {
+        i += 1;
+        const val = sortingArr[i];
+        sortingArr[i] = sortingArr[j];
+        sortingArr[j] = val;
+      }
+    }
+    const val = array[i + 1];
+    sortingArr[i + 1] = sortingArr[max];
+    sortingArr[max] = val;
+    return i + 1;
+  }
+
+  function speedUpSort(sortArr, min, max) {
+    if (min < max) {
+      const dividerIdx = getDivider(sortArr, min, max);
+      speedUpSort(sortArr, min, dividerIdx - 1);
+      speedUpSort(sortArr, dividerIdx + 1, max);
+    }
+  }
+
+  speedUpSort(array, 0, array.length - 1);
+  return array;
 }
 
 /**
